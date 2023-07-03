@@ -19,11 +19,11 @@ return new class extends Migration
             $table->text('body');
             $table->text('image');
             $table->tinyInteger('status')->default(0);
-            $table->tinyInteger('commantable')->default(0)->comment('0 => uncommentable, 1 => commentable');
+            $table->tinyInteger('commentable')->default(0)->comment('0 => uncommentable, 1 => commentable');
             $table->string('tags');
             $table->timestamp('published_at');
-            $table->foreignId('author_id')->constrained('users');
-            $table->foreignId('category_id')->constrained('post_categories');
+            $table->foreignId('author_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('post_categories')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
