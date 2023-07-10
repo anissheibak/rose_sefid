@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('guarantees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->string('slug')->unique()->nullable();
-            $table->text('image')->nullable();
+            $table->foreignId('product_id')->constrained('products')->onUpdate('cascade')->onDelete('cascade');
+            $table->decimal('price_increase', 20, 3)->default(0);
             $table->tinyInteger('status')->default(0);
-            $table->tinyInteger('show_in_menu')->default(0);
-            $table->string('tags');
-            $table->foreignId('parent_id')->nullable()->constrained('product_categories');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('guarantees');
     }
 };
