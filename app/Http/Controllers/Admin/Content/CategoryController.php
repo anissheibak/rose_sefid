@@ -66,7 +66,7 @@ class CategoryController extends Controller
      */
     public function edit(PostCategory $postCategory)
     {
-        //
+        return view('admin.content.category.edit', compact('postCategory'));
     }
 
     /**
@@ -76,9 +76,12 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostCategoryRequest $request, PostCategory $postCategory)
     {
-        //
+        $inputs=$request->all();
+        $inputs['image']='image';
+        $postCategory->update($inputs);
+        return redirect()->route('admin.content.category.index');
     }
 
     /**
@@ -91,5 +94,22 @@ class CategoryController extends Controller
     {
         $result=$postCategory->delete();
         return redirect()->route('admin.content.category.index');
+    }
+
+    public function status(PostCategory $postCategory)
+    {
+        $postCategory->status = $postCategory->status == 0 ? 1: 0;
+        $result = $postCategory->save();
+        if($result){
+            if($postCategory->status == 0){
+                return response()->json(['status' => true, 'checked' => false]);
+            }
+            else{
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        }
+        else{
+            return response()->json(['status' => false]);
+        }
     }
 }
