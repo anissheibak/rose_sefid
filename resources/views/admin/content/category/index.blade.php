@@ -64,7 +64,7 @@
                                 <form class="d-inline" action="{{ route('admin.content.category.destroy', $postCategory->id) }}" method="POST">
                                     @csrf
                                     {{method_field('DELETE')}}
-                                    <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
+                                    <button class="btn btn-danger btn-sm delete" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
                                 </form>
                             </td>
                         </tr>
@@ -116,38 +116,39 @@
 
             function successToast(message){
 
-var successToastTag = '<section class="toast" data-delay="5000">\n' +
-    '<section class="toast-body py-3 d-flex bg-success text-white">\n' +
-        '<strong class="ml-auto">' + message + '</strong>\n' +
-        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
-            '<span aria-hidden="true">&times;</span>\n' +
-            '</button>\n' +
-            '</section>\n' +
-            '</section>';
+                var successToastTag = '<section class="toast" data-delay="5000">\n' +
+                    '<section class="toast-body py-3 d-flex bg-success text-white">\n' +
+                        '<strong class="ml-auto">' + message + '</strong>\n' +
+                        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
+                            '<span aria-hidden="true">&times;</span>\n' +
+                            '</button>\n' +
+                            '</section>\n' +
+                            '</section>';
 
-$('.toast-wrapper').append(successToastTag);
-$('.toast').toast('show').delay(5500).queue(function() {
-    $(this).remove();
-})
-}
+                $('.toast-wrapper').append(successToastTag);
+                $('.toast').toast('show').delay(5500).queue(function() {
+                    $(this).remove();
+                })
+            }
+            function errorToast(message){
 
-function errorToast(message){
+                var errorToastTag = '<section class="toast" data-delay="5000">\n' +
+                    '<section class="toast-body py-3 d-flex bg-danger text-white">\n' +
+                        '<strong class="ml-auto">' + message + '</strong>\n' +
+                        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
+                            '<span aria-hidden="true">&times;</span>\n' +
+                            '</button>\n' +
+                            '</section>\n' +
+                            '</section>';
 
-var errorToastTag = '<section class="toast" data-delay="5000">\n' +
-    '<section class="toast-body py-3 d-flex bg-danger text-white">\n' +
-        '<strong class="ml-auto">' + message + '</strong>\n' +
-        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
-            '<span aria-hidden="true">&times;</span>\n' +
-            '</button>\n' +
-            '</section>\n' +
-            '</section>';
-
-$('.toast-wrapper').append(errorToastTag);
-$('.toast').toast('show').delay(5500).queue(function() {
-    $(this).remove();
-})
-}
+                $('.toast-wrapper').append(errorToastTag);
+                $('.toast').toast('show').delay(5500).queue(function() {
+                    $(this).remove();
+                })
+            }
         }
 
     </script>
+
+    @include('admin.alerts.sweetalert.delete-confirm', ['className' => 'delete'])
 @endsection
