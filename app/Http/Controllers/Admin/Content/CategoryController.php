@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Content;
 
+use App\Http\Services\Image\ImageService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -38,10 +39,18 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostCategoryRequest $request)
+    public function store(PostCategoryRequest $request, ImageService $imageService)
     {
         $inputs=$request->all();
-        $inputs['image']='image';
+        if($request->hasFile('image')){
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'post-category');
+            $result = $imageService->createIndexAndSave($request->file('image'));
+        }
+        if($result === false){
+            return redirect()->route('admin.content.category.create')->with('swal-error', 'آپلود تصویر با خطا مواجه شد.');
+        }
+
+        $inputs['image'] = $result;
         $postCategory=PostCategory::create($inputs);
         return redirect()->route('admin.content.category.index')->with('swal-success', 'دسته‌بندی جدید شما با موفقیت ثبت شد.');
     }
@@ -75,10 +84,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostCategoryRequest $request, PostCategory $postCategory)
+    public function update(PostCategoryRequest $request, PostCategory $postCategory, ImageService $imageService)
     {
         $inputs=$request->all();
-        $inputs['image']='image';
+        if($request->hasFile('image')){
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'post-category');
+            $result = $imageService->createIndexAndSave($request->file('image'));
+            if($result === false){
+                return redirect()->route('admin.content.category.create')->with('swal-error', 'آپلود تصویر با خطا مواجه شد.');
+            }
+
+            $inputs['image'] = $result;
+        }
+
         $postCategory->update($inputs);
         return redirect()->route('admin.content.category.index')->with('swal-success', 'دسته‌بندی با موفقیت ویرایش شد.');
     }
