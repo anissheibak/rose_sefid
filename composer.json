@@ -9,6 +9,7 @@
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
+        "intervention/imagecache": "^2.6",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^3.2",
         "laravel/sanctum": "^3.2",
