@@ -43,16 +43,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($posts as $key => $post)
                         <tr>
-                            <th>1</th>
-                            <td>چگونه از باطری موبایل نگهداری کینم؟</td>
-                            <td>اقتصادی</td>
-                            <td><img src="{{ asset('admin-assets/images/avatar-2.jpg') }}"  alt="" class="max-height-2rem"></td>
+                            <th>{{$key += 1}}</th>
+                            <td>{{$post->name}}</td>
+                            <td>{{$post->postCategory->name}}</td>
+                            {{-- <td><img src="{{ asset($post->image['indexArray'][$post->image['currentImage']]) }}" alt="Post Image" width="80px" height="80px"></td> --}}
                             <td class="width-16-rem text-left">
                                 <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
                                 <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
                             </td>
                         </tr>
+
+                        @endforeach
 
                     </tbody>
                 </table>
