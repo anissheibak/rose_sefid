@@ -157,7 +157,10 @@ return [
         "priority_id"               => "اولویت",
         "category_id"               => "دسته بندی",
         "tags"                      => "تگ‌ها",
-        "status"                    => "وضعیت"
+        "status"                    => "وضعیت",
+        "summary"                   => "خلاصه متن",
+        "question"                  => "پرسش",
+        "answer"                    => "پاسخ",
 
     ],
 ];
