@@ -177,8 +177,18 @@
 }
 
 .sidebar-wrapper::-webkit-scrollbar {
-    display: none;
+    width: 8px;
 }
+.sidebar-wrapper::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #FE8A7D;
+    border-radius: 5px;
+}
+.sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #cecece;
+  }
 
 .sidebar-part-title {
     font-size: .9rem;
