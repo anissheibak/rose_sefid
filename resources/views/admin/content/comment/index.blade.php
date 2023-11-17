@@ -36,39 +36,44 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>کد کاربر</th>
+                            <th>نظر</th>
+                            <th>پاسخ به</th>
                             <th>نویسنده نظر</th>
-                            <th>کد کالا</th>
-                            <th>کالا</th>
-                            <th>وضعیت</th>
+                            <th>کد کاربر</th>
+                            <th>پست</th>
+                            <th>کد پست</th>
+                            <th>وضعیت تایید</th>
+                            <th>وضعیت کامنت</th>
                             <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($comments as $key => $comment)
                         <tr>
-                            <th>1</th>
-                            <td>1231231</td>
-                            <td>حسن خسروجردی</td>
-                            <td>21321312</td>
-                            <td>ایفون 12</td>
-                            <td>در انتظار تایید</td>
-                            <td class="width-16-rem text-left">
-                                <a href="{{ route('admin.content.comment.show') }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> نمایش</a>
-                                <button class="btn btn-success btn-sm" type="submit"><i class="fa fa-check"></i> تایید</button>
+                            <th>{{$key += 1}}</th>
+                            <td>{{Str::limit($comment->body, 30)}}</td>
+                            <td>{{$comment->parent_id ? Str::limit($comment->parent->body, 25) : ''}}</td>
+                            <td>{{$comment->user->full_name}}</td>
+                            <td>{{$comment->author_id}}</td>
+                            <td>{{$comment->commentable->name}}</td>
+                            <td>{{$comment->commentable_id}}</td>
+                            <td>{{$comment->approved == 1 ? 'تایید شده' : 'تایید نشده'}}</td>
+                            <td>
+                                <label for="">
+                                    <input id="{{$comment->id}}" onchange="changeStatus({{$comment->id}})" data-url="{{ route('admin.content.comment.status', $comment->id) }}" type="checkbox" @if ($comment->status === 1) checked @endif>
+                                </label>
+                            </td>
+                            <td class="width-16-rem text-center">
+                                <a href="{{ route('admin.content.comment.show', $comment->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> نمایش</a>
+
+                                @if ($comment->approved == 1)
+                                <a href="{{ route('admin.content.comment.approved', $comment->id) }}" class="btn btn-warning btn-sm text-white" type="submit"><i class="fa fa-clock"></i> عدم تایید</a>
+                                @else
+                                <a href="{{ route('admin.content.comment.approved', $comment->id) }}" class="btn btn-success btn-sm text-white" type="submit"><i class="fa fa-check-circle"></i>  تایید</a>
+                                @endif
                             </td>
                         </tr>
-                        <tr>
-                            <th>2</th>
-                            <td>1231231</td>
-                            <td>حسن خسروجردی</td>
-                            <td>21321312</td>
-                            <td>ایفون 12</td>
-                            <td>تایید شده</td>
-                            <td class="width-16-rem text-left">
-                                <a href="{{ route('admin.content.comment.show') }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> نمایش</a>
-                                <button class="btn btn-warning btn-sm" type="submit"><i class="fa fa-clock"></i> عدم تایید</button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </section>
@@ -76,5 +81,77 @@
         </section>
     </section>
 </section>
+
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+
+        function changeStatus(id){
+            var element = $("#" + id)
+            var url = element.attr('data-url')
+            var elementValue = !element.prop('checked');
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: "data",
+                success: function (response) {
+                    if(response.status){
+                        if(response.checked){
+                            element.prop('checked', true);
+                            successToast('نظر با موفقیت فعال شد.');
+                        }
+                        else{
+                            element.prop('checked', false);
+                            successToast('نظر با موفقیت غیرفعال شد.')
+                        }
+                    }
+                    else{
+                        element.prop('checked', elementValue);
+                        errorToast('هنگام ویرایش مشکلی رخ داده است.')
+                    }
+                },
+                error: function(){
+                    element.prop('checked', elementValue);
+                    errorToast('ارتباط برقرار نشد!')
+                }
+            });
+
+            function successToast(message){
+
+                var successToastTag = '<section class="toast" data-delay="5000">\n' +
+                    '<section class="toast-body py-3 d-flex bg-success text-white">\n' +
+                        '<strong class="ml-auto">' + message + '</strong>\n' +
+                        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
+                            '<span aria-hidden="true">&times;</span>\n' +
+                            '</button>\n' +
+                            '</section>\n' +
+                            '</section>';
+
+                $('.toast-wrapper').append(successToastTag);
+                $('.toast').toast('show').delay(5500).queue(function() {
+                    $(this).remove();
+                })
+            }
+            function errorToast(message){
+
+                var errorToastTag = '<section class="toast" data-delay="5000">\n' +
+                    '<section class="toast-body py-3 d-flex bg-danger text-white">\n' +
+                        '<strong class="ml-auto">' + message + '</strong>\n' +
+                        '<button type="button" class="mr-2 close" data-dismiss="toast" aria-label="Close">\n' +
+                            '<span aria-hidden="true">&times;</span>\n' +
+                            '</button>\n' +
+                            '</section>\n' +
+                            '</section>';
+
+                $('.toast-wrapper').append(errorToastTag);
+                $('.toast').toast('show').delay(5500).queue(function() {
+                    $(this).remove();
+                })
+            }
+        }
+
+    </script>
 
 @endsection
