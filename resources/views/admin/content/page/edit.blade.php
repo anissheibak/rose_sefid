@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>پیج ساز</title>
+<title>ویرایش پیج</title>
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">پیج ساز</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد پیج</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش پیج</li>
     </ol>
   </nav>
 
@@ -21,7 +21,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  ایجاد پیج
+                  ویرایش پیج
                 </h5>
             </section>
 
@@ -30,14 +30,15 @@
             </section>
 
             <section>
-                <form action="{{ route('admin.content.page.store') }}" method="POST" id="form">
+                <form action="{{ route('admin.content.page.update', $page->id) }}" method="POST" id="form">
                     @csrf
+                    {{method_field('PUT')}}
                     <section class="row">
 
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">عنوان پیج</label>
-                                <input type="text" name="title" class="form-control form-control-sm" value="{{old('title')}}">
+                                <input type="text" name="title" class="form-control form-control-sm" value="{{old('title', $page->title)}}">
                             </div>
                             @error('title')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -52,8 +53,8 @@
                             <div class="form-group">
                                 <label for="status">وضعیت</label>
                                 <select name="status" id="status" class="form-control form-control-sm">
-                                    <option value="0" @if (old('status')==0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if (old('status')==1) selected @endif>فعال</option>
+                                    <option value="0" @if (old('status', $page->status)==0) selected @endif>غیرفعال</option>
+                                    <option value="1" @if (old('status', $page->status)==1) selected @endif>فعال</option>
                                 </select>
                             </div>
                             @error('status')
@@ -68,7 +69,7 @@
                         <section class="col-12 my-2">
                             <div class="form-group">
                                 <label for="tags">تگ‌ها</label>
-                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags')}}">
+                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags', $page->tags)}}">
                                 <select class="select2 form-control form-control-sm" id="select_tags" multiple>
 
                                 </select>
@@ -85,7 +86,7 @@
                         <section class="col-12">
                             <div class="form-group">
                                 <label for="">محتوی</label>
-                                <textarea name="body" id="body"  class="form-control form-control-sm" rows="6">{{old('body')}}</textarea>
+                                <textarea name="body" id="body"  class="form-control form-control-sm" rows="6">{{old('body', $page->body)}}</textarea>
                             </div>
                             @error('body')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
