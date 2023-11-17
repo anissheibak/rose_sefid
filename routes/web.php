@@ -190,11 +190,11 @@ Route::prefix('admin')->namespace('Admin')->group(function(){
       //comment
       Route::prefix('comment')->group(function(){
         Route::get('/', [ContentCommentController::class, 'index'])->name('admin.content.comment.index');
-        Route::get('/show', [ContentCommentController::class, 'show'])->name('admin.content.comment.show');
-        Route::post('/store', [ContentCommentController::class, 'store'])->name('admin.content.comment.store');
-        Route::get('/edit/{id}', [ContentCommentController::class, 'edit'])->name('admin.content.comment.edit');
-        Route::put('/update/{id}', [ContentCommentController::class, 'update'])->name('admin.content.comment.update');
-        Route::delete('/destroy/{id}', [ContentCommentController::class, 'destroy'])->name('admin.content.comment.destroy');
+        Route::get('/show/{comment}', [ContentCommentController::class, 'show'])->name('admin.content.comment.show');
+        Route::delete('/destroy/{comment}', [ContentCommentController::class, 'destroy'])->name('admin.content.comment.destroy');
+        Route::get('/status/{comment}', [ContentCommentController::class, 'status'])->name('admin.content.comment.status');
+        Route::get('/approved/{comment}', [ContentCommentController::class, 'approved'])->name('admin.content.comment.approved');
+
 });
 
       //faq
@@ -216,7 +216,7 @@ Route::prefix('admin')->namespace('Admin')->group(function(){
         Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('admin.content.menu.edit');
         Route::put('/update/{menu}', [MenuController::class, 'update'])->name('admin.content.menu.update');
         Route::delete('/destroy/{menu}', [MenuController::class, 'destroy'])->name('admin.content.menu.destroy');
-        Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.menu.status');
+        Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.faq.status');
 
 });
 
