@@ -91,11 +91,11 @@
                     if(response.status){
                         if(response.checked){
                             element.prop('checked', true);
-                            successToast('دسته‌بندی با موفقیت فعال شد.');
+                            successToast('پیامک با موفقیت فعال شد.');
                         }
                         else{
                             element.prop('checked', false);
-                            successToast('دسته‌بندی با موفقیت غیرفعال شد.')
+                            successToast('پیامک با موفقیت غیرفعال شد.')
                         }
                     }
                     else{

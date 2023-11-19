@@ -163,6 +163,6 @@ return [
         "answer"                    => "پاسخ",
         "parent_id"                 => "منوی والد",
         "url"                       => "آدرس url",
-
+        "subject"                     => "عنوان",
     ],
 ];
