@@ -164,5 +164,6 @@ return [
         "parent_id"                 => "منوی والد",
         "url"                       => "آدرس url",
         "subject"                     => "عنوان",
+        "keywords"                     => "کلمات کلیدی",
     ],
 ];

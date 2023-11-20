@@ -48,8 +48,8 @@
                             <td>{{$setting->title}}</td>
                             <td>{{$setting->description}}</td>
                             <td>{{$setting->keywords}}</td>
-                            <td>{{$setting->logo}}</td>
-                            <td>{{$setting->icon}}</td>
+                            <td><img src="{{ asset($setting->logo) }}" alt="setting logo" width="80px" height="80px"></td>
+                            <td><img src="{{ asset($setting->icon) }}" alt="setting icon" width="80px" height="80px"></td>
                             <td class="width-22-rem text-left">
                                 <a href="{{ route('admin.setting.edit', $setting->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
                             </td>
