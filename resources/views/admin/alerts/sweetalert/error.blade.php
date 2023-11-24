@@ -3,7 +3,7 @@
     <script>
         $(document).ready(function(){
             Swal.fire({
-                title: 'خطا!',
+                title: '!',
                 text: '{{session('swal-error')}}',
                 icon: 'error',
                 confirmButtonText: 'باشه',
