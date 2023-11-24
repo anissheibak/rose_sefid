@@ -78,9 +78,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.user.admin-user.edit', compact('user'));
     }
 
     /**
@@ -90,9 +90,28 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AdminUserRequest $request, User $user, ImageService $imageService)
     {
-        //
+        $inputs=$request->all();
+
+        if($request->hasFile('profile_photo_path')){
+
+            if(!empty($user->profile_photo_path)){
+               $res=$imageService->deleteImage($user->profile_photo_path);
+            }
+
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'admin-users');
+            $result = $imageService->save($request->file('profile_photo_path'));
+
+            if($result === false){
+                return redirect()->route('admin.user.admin-user.create')->with('swal-error', 'آپلود تصویر با خطا مواجه شد.');
+            }
+
+            $inputs['profile_photo_path'] = $result;
+        }
+
+        $user->update($inputs);
+        return redirect()->route('admin.user.admin-user.index')->with('swal-success', 'کاربر ادمین با موفقیت ویرایش شد.');
     }
 
     /**
@@ -101,9 +120,10 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->forceDelete();
+        return redirect()->route('admin.user.admin-user.index')->with('swal-error','کاربر ادمین با موفقیت حذف شد.');
     }
 
     public function status(User $user){
