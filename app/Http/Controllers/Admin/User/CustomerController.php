@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\User\CustomerRequest;
+use App\Http\Services\Image\ImageService;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -14,7 +18,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('admin.user.customer.index');
+        $users = User::where('user_type', 0)->get();
+        return view('admin.user.customer.index', compact('users'));
 
     }
 
@@ -35,9 +40,26 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request, ImageService $imageService)
     {
-        //
+        $inputs=$request->all();
+
+        if($request->hasFile('profile_photo_path')){
+
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'customers');
+            $result = $imageService->save($request->file('profile_photo_path'));
+
+            if($result === false){
+                return redirect()->route('admin.user.customer.create')->with('swal-error', 'آپلود تصویر با خطا مواجه شد.');
+            }
+
+            $inputs['profile_photo_path'] = $result;
+        }
+
+        $inputs['user_type'] = 0;
+        $inputs['password'] = Hash::make($request->password);
+        $user = User::create($inputs);
+        return redirect()->route('admin.user.customer.index')->with('swal-success', 'مشتری جدید با موفقیت ثبت شد.');
     }
 
     /**
@@ -57,9 +79,9 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.user.customer.edit', compact('user'));
     }
 
     /**
@@ -69,9 +91,28 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, User $user, ImageService $imageService)
     {
-        //
+        $inputs=$request->all();
+
+        if($request->hasFile('profile_photo_path')){
+
+            if(!empty($user->profile_photo_path)){
+               $res=$imageService->deleteImage($user->profile_photo_path);
+            }
+
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'customers');
+            $result = $imageService->save($request->file('profile_photo_path'));
+
+            if($result === false){
+                return redirect()->route('admin.user.customer.create')->with('swal-error', 'آپلود تصویر با خطا مواجه شد.');
+            }
+
+            $inputs['profile_photo_path'] = $result;
+        }
+
+        $user->update($inputs);
+        return redirect()->route('admin.user.customer.index')->with('swal-success', 'کاربر مشتری با موفقیت ویرایش شد.');
     }
 
     /**
@@ -80,8 +121,45 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->forceDelete();
+        return redirect()->route('admin.user.customer.index')->with('swal-error','کاربر مشتری با موفقیت حذف شد.');
+    }
+
+    public function status(User $user){
+
+        $user->status = $user->status == 0 ? 1 : 0;
+        $result = $user->save();
+        if($result){
+                if($user->status == 0){
+                    return response()->json(['status' => true, 'checked' => false]);
+                }
+                else{
+                    return response()->json(['status' => true, 'checked' => true]);
+                }
+        }
+        else{
+            return response()->json(['status' => false]);
+        }
+
+    }
+
+
+    public function activation(User $user){
+        $user->activation = $user->activation == 0 ? 1 : 0;
+        $result = $user->save();
+        if($result){
+                if($user->activation == 0){
+                    return response()->json(['status' => true, 'checked' => false]);
+                }
+                else{
+                    return response()->json(['status' => true, 'checked' => true]);
+                }
+        }
+        else{
+            return response()->json(['status' => false]);
+        }
+
     }
 }
