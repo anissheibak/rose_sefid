@@ -52,8 +52,15 @@
                         <section class="col-12">
                             <div class="form-group">
                                 <label for="">پاسخ ادمین</label>
-                                <textarea name="body" class="form-control form-control-sm" rows="4"></textarea>
+                                <textarea name="body" class="form-control form-control-sm" rows="4">{{old('body')}}</textarea>
                             </div>
+                            @error('body')
+                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
+                                    <strong>
+                                        {{$message}}
+                                    </strong>
+                                </span>
+                            @enderror
                         </section>
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
