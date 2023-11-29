@@ -30,25 +30,34 @@
             </section>
 
             <section class="card mb-3">
-                <section class="card-header text-white bg-custom-pink">
-                    کامران محمدی - 845362736
+                <section class="card-header text-white bg-custom-yellow">
+                    <span class="font-size-16">{{$ticket->user->fullName}} - {{$ticket->id}}</span>
                 </section>
                 <section class="card-body">
-                    <h5 class="card-title">موضوع : عدم دسترسی به صفحه سفارشات من
-                    </h5>
-                    <p class="card-text">من دیروز خرید کردم، ولی به بخش سفارشات پنل نمی توانم برم و وضعیت سفارشم را ببینم
-                    </p>
+                    <h6 class="card-title">
+                        <strong>عنوان تیکت:</strong> {{$ticket->subject}}
+                    </h6>
+                    <hr>
+                    <strong>متن تیکت: </strong><p class="card-text font-size-16">{{$ticket->description}}</p>
                 </section>
             </section>
 
             <section>
-                <form action="" method="">
+                <form action="{{ route('admin.ticket.answer', $ticket->id) }}" method="POST">
+                    @csrf
                     <section class="row">
                         <section class="col-12">
                             <div class="form-group">
-                                <label for="">پاسخ تیکت </label>
-                               ‍<textarea class="form-control form-control-sm" rows="4"></textarea>
+                                <label for="">پاسخ ادمین</label>
+                                <textarea name="description" class="form-control form-control-sm" rows="4">{{old('description')}}</textarea>
                             </div>
+                            @error('description')
+                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
+                                    <strong>
+                                        {{$message}}
+                                    </strong>
+                                </span>
+                            @enderror
                         </section>
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
@@ -56,7 +65,6 @@
                     </section>
                 </form>
             </section>
-
         </section>
     </section>
 </section>

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Ticket\Ticket;
 use App\Models\Ticket\TicketAdmin;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -75,5 +77,10 @@ class User extends Authenticatable
     public function ticketAdmin():HasOne
     {
         return $this->hasOne(TicketAdmin::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
     }
 }
