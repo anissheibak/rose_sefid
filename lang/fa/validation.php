@@ -173,5 +173,10 @@ return [
         "subject"                   => "عنوان",
         "keywords"                  => "کلمات کلیدی",
         "profile_photo_path"        => "فیلد عکس کاربر",
+        'logo' => 'لوگو',
+        'icon' => 'آیکون',
+        'amount' => 'هزینه',
+        'delivery_time' => 'زمان ارسال',
+        'delivery_time_unit' => 'واحد زمان ارسال',
     ],
 ];
