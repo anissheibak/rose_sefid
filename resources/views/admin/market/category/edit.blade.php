@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>دسته بندی</title>
+<title>ویرایش دسته بندی</title>
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">دسته بندی</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد دسته بندی</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش دسته بندی</li>
     </ol>
   </nav>
 
@@ -21,7 +21,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  ایجاد دسته بندی
+                  ویرایش دسته بندی
                 </h5>
             </section>
 
@@ -30,14 +30,15 @@
             </section>
 
             <section>
-                <form action="{{ route('admin.market.category.store') }}" method="POST" enctype="multipart/form-data" id="form">
+                <form action="{{ route('admin.market.category.update', $productCategory->id) }}" method="POST" enctype="multipart/form-data" id="form">
                     @csrf
+                    {{method_field('PUT')}}
                     <section class="row">
 
-                        <section class="col-12 col-md-6">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <label for="">نام دسته</label>
-                                <input type="text" name="name" value="{{old('name')}}" class="form-control form-control-sm">
+                                <label for="name">نام دسته</label>
+                                <input type="text" class="form-control form-control-sm" name="name" id="name" value="{{old('name', $productCategory->name)}}">
                             </div>
                             @error('name')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -53,8 +54,8 @@
                                 <label for="">دسته‌ی والد</label>
                                 <select name="parent_id" id="" class="form-control form-control-sm">
                                     <option value="">دسته‌بندی اصلی</option>
-                                    @foreach ($productCategories as $productCategory )
-                                    <option value="{{$productCategory->id}}" @if (old('parent_id') == $productCategory->id) selected @endif>{{$productCategory->name}}</option>
+                                    @foreach ($parent_productCategories as $parent_productCategory )
+                                    <option value="{{$parent_productCategory->id}}" @if (old('parent_id', $parent_productCategory->parent_id) == $parent_productCategory->id) selected @endif>{{$parent_productCategory->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -70,7 +71,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="tags">تگ‌ها</label>
-                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags')}}">
+                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags', $productCategory->tags)}}">
                                 <select class="select2 form-control form-control-sm" id="select_tags" multiple>
 
                                 </select>
@@ -88,28 +89,11 @@
                             <div class="form-group">
                                 <label for="status">وضعیت</label>
                                 <select name="status" id="status" class="form-control form-control-sm">
-                                    <option value="0" @if (old('status')==0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if (old('status')==1) selected @endif>فعال</option>
+                                    <option value="0" @if (old('status', $productCategory->status)==0) selected @endif>غیرفعال</option>
+                                    <option value="1" @if (old('status',$productCategory->status)==1) selected @endif>فعال</option>
                                 </select>
                             </div>
                             @error('status')
-                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
-                                    <strong>
-                                        {{$message}}
-                                    </strong>
-                                </span>
-                            @enderror
-                        </section>
-
-                        <section class="col-12 col-md-6 my-2">
-                            <div class="form-group">
-                                <label for="show_in_menu">نمایش در منو</label>
-                                <select name="show_in_menu" id="show_in_menu" class="form-control form-control-sm">
-                                    <option value="0" @if (old('show_in_menu')==0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if (old('show_in_menu')==1) selected @endif>فعال</option>
-                                </select>
-                            </div>
-                            @error('show_in_menu')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
                                     <strong>
                                         {{$message}}
@@ -130,12 +114,37 @@
                                     </strong>
                                 </span>
                             @enderror
+
+                            <section class="row">
+                                @php
+                                    $number = 1;
+                                @endphp
+                                @foreach ($productCategory->image['indexArray'] as $key => $value )
+
+
+                                <section class="col-md-{{6 / $number}}">
+                                    <div class="form-check">
+                                        <input type="radio" name="currentImage" class="form-check-input" value="{{$key}}" id="{{$number}}"
+                                        @if ($productCategory->image['currentImage'] == $key)
+                                            checked
+                                        @endif>
+
+                                        <label for="{{$number}}" class="form-check-label mx-2">
+                                            <img src="{{ asset($value) }}" class="w-100" alt="">
+                                        </label>
+                                    </div>
+                                </section>
+                                @php
+                                    $number++;
+                                @endphp
+                                @endforeach
+                            </section>
                         </section>
 
                         <section class="col-12 my-2">
                             <div class="form-group">
                                 <label for="description">توضیحات</label>
-                                <textarea name="description" id="description"  class="form-control form-control-sm" rows="6">{{old('description')}}</textarea>
+                                <textarea name="description" id="description"  class="form-control form-control-sm" rows="6">{{old('description', $productCategory->description)}}</textarea>
                             </div>
                             @error('description')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -145,6 +154,7 @@
                                 </span>
                             @enderror
                         </section>
+
 
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
@@ -158,7 +168,6 @@
 </section>
 
 @endsection
-
 @section('script')
 
     <script src="{{ asset('admin-assets/ckeditor/ckeditor.js') }}"></script>
