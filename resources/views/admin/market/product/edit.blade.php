@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>ایجاد کالا</title>
+<title>ویرایش کالا</title>
 <link rel="stylesheet" href="{{ asset('admin-assets/JalaliDatePicker/persian-datepicker.min.css') }}">
 @endsection
 
@@ -12,7 +12,7 @@
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">کالا </a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد کالا</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش کالا</li>
     </ol>
   </nav>
 
@@ -22,7 +22,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  ایجاد کالا
+                  ویرایش کالا
                 </h5>
             </section>
 
@@ -31,14 +31,15 @@
             </section>
 
             <section>
-                <form action="{{ route('admin.market.product.store') }}" method="POST" enctype="multipart/form-data" id="form">
+                <form action="{{ route('admin.market.product.update', $product->id) }}" method="POST" enctype="multipart/form-data" id="form">
                     @csrf
+                    @method('PUT')
                     <section class="row">
 
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">نام محصول</label>
-                                <input type="text" name="name" value="{{old('name')}}" class="form-control form-control-sm">
+                                <input type="text" name="name" value="{{old('name', $product->name)}}" class="form-control form-control-sm">
                             </div>
                             @error('name')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -55,7 +56,7 @@
                                 <select name="category_id" id="" class="form-control form-control-sm">
                                     <option value="">دسته را انتخاب کنید</option>
                                     @foreach ($categories as $category)
-                                    <option value="{{$category->id}}" @if (old('category_id') == $category->id) selected @endif>{{$category->name}}</option>
+                                    <option value="{{$category->id}}" @if (old('category_id', $product->category_id) == $category->id) selected @endif>{{$category->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -74,7 +75,7 @@
                                 <select name="brand_id" id="" class="form-control form-control-sm">
                                     <option value="">برند را انتخاب کنید</option>
                                     @foreach ($brands as $brand)
-                                    <option value="{{$brand->id}}" @if (old('brand_id') == $brand->id) selected @endif>{{$brand->original_name}} - {{$brand->persian_name}}</option>
+                                    <option value="{{$brand->id}}" @if (old('brand_id', $product->brand_id) == $brand->id) selected @endif>{{$brand->original_name}} - {{$brand->persian_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -89,8 +90,8 @@
 
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <label for="">تصویر </label>
-                                <input type="file" name="image" class="form-control form-control-sm">
+                                <label for="image">تصویر</label>
+                                <input type="file" class="form-control form-control-sm" name="image" id="image">
                             </div>
                             @error('image')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -99,15 +100,39 @@
                                     </strong>
                                 </span>
                             @enderror
+
+                            <section class="row">
+                                @php
+                                    $number = 1;
+                                @endphp
+                                @foreach ($product->image['indexArray'] as $key => $value )
+
+
+                                <section class="col-md-{{6 / $number}}">
+                                    <div class="form-check">
+                                        <input type="radio" name="currentImage" class="form-check-input" value="{{$key}}" id="{{$number}}"
+                                        @if ($product->image['currentImage'] == $key)
+                                            checked
+                                        @endif>
+
+                                        <label for="{{$number}}" class="form-check-label mx-2">
+                                            <img src="{{ asset($value) }}" class="w-100" alt="">
+                                        </label>
+                                    </div>
+                                </section>
+                                @php
+                                    $number++;
+                                @endphp
+                                @endforeach
+                            </section>
                         </section>
 
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="published_at">تاریخ انتشار</label>
-                                <input type="text" name="published_at" id="published_at" class="form-control form-control-sm d-none">
-                                <input type="text" id="published_at_view" class="form-control form-control-sm">
+                                <input type="text" name="published_at" id="published_at" class="form-control form-control-sm d-none" value="{{old('published_at', $product->published_at)}}">
+                                <input type="text" id="published_at_view" class="form-control form-control-sm" value="{{old('published_at', $product->published_at)}}">
                             </div>
-
                             @error('published_at')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
                                     <strong>
@@ -120,7 +145,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">وزن</label>
-                                <input type="text" name="weight" class="form-control form-control-sm" value="{{old('weight')}}">
+                                <input type="text" name="weight" class="form-control form-control-sm" value="{{old('weight', $product->weight)}}">
                             </div>
                             @error('weight')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -134,7 +159,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">طول</label>
-                                <input type="text" name="length" class="form-control form-control-sm" value="{{old('length')}}">
+                                <input type="text" name="length" class="form-control form-control-sm" value="{{old('length', $product->length)}}">
                             </div>
                             @error('length')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -148,7 +173,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">عرض</label>
-                                <input type="text" name="width" class="form-control form-control-sm" value="{{old('width')}}">
+                                <input type="text" name="width" class="form-control form-control-sm" value="{{old('width', $product->width)}}">
                             </div>
                             @error('width')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -162,7 +187,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">ارتفاع</label>
-                                <input type="text" name="height" class="form-control form-control-sm" value="{{old('height')}}">
+                                <input type="text" name="height" class="form-control form-control-sm" value="{{old('height', $product->height)}}">
                             </div>
                             @error('height')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -176,7 +201,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">قیمت کالا</label>
-                                <input type="text" name="price" class="form-control form-control-sm" value="{{old('price')}}">
+                                <input type="text" name="price" class="form-control form-control-sm" value="{{old('price', $product->price)}}">
                                 <span style="color: rgb(156, 152, 152)">لطفا مبلغ را به تومان وارد کنید؛ مثال: 50000 یا 50000.000</span>
                             </div>
                         </section>
@@ -185,8 +210,8 @@
                             <div class="form-group">
                                 <label for="status">وضعیت</label>
                                 <select name="status" id="status" class="form-control form-control-sm">
-                                    <option value="0" @if (old('status')==0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if (old('status')==1) selected @endif>فعال</option>
+                                    <option value="0" @if (old('status', $product->status)==0) selected @endif>غیرفعال</option>
+                                    <option value="1" @if (old('status', $product->status)==1) selected @endif>فعال</option>
                                 </select>
                             </div>
                             @error('status')
@@ -202,8 +227,8 @@
                             <div class="form-group">
                                 <label for="marketable">قابل فروش بودن</label>
                                 <select name="marketable" id="marketable" class="form-control form-control-sm">
-                                    <option value="0" @if (old('marketable')==0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if (old('marketable')==1) selected @endif>فعال</option>
+                                    <option value="0" @if (old('marketable', $product->marketable)==0) selected @endif>غیرفعال</option>
+                                    <option value="1" @if (old('marketable', $product->marketable)==1) selected @endif>فعال</option>
                                 </select>
                             </div>
                             @error('marketable')
@@ -218,7 +243,7 @@
                         <section class="col-12 my-2">
                             <div class="form-group">
                                 <label for="tags">تگ‌ها</label>
-                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags')}}">
+                                <input type="hidden" class="form-control form-control-sm" name="tags" id="tags" value="{{old('tags', $product->tags)}}">
                                 <select class="select2 form-control form-control-sm" id="select_tags" multiple>
 
                                 </select>
@@ -235,32 +260,30 @@
                         <section class="col-12 my-2">
                             <div class="form-group">
                                 <label for="">معرفی محصول</label>
-                                <textarea name="introduction" id="introduction"  class="form-control form-control-sm" rows="6">{{old('introduction')}}</textarea>
+                                <textarea name="introduction" id="introduction"  class="form-control form-control-sm" rows="6">{{old('introduction', $product->introduction)}}</textarea>
                             </div>
                         </section>
 
                         <section class="col-12 border-top border-bottom py-3 mb-3">
 
+                            @foreach ($product->metas as $meta)
+
                             <section class="row">
 
                                 <section class="col-6 col-md-3 my-2">
                                     <div class="form-group">
-                                        <input type="text" name="meta_key[]" class="form-control form-control-sm" placeholder="ویژگی ...">
+                                        <input type="text" name="meta_key[{{$meta->id}}]" class="form-control form-control-sm" value="{{$meta->meta_key}}">
                                     </div>
                                 </section>
 
                                 <section class="col-6 col-md-3 my-2">
                                     <div class="form-group">
-                                        <input type="text" name="meta_value[]" class="form-control form-control-sm" placeholder="مقدار ...">
+                                        <input type="text" name="meta_value[]" class="form-control form-control-sm" value="{{$meta->meta_value}}">
                                     </div>
                                 </section>
 
                             </section>
-
-                            <section>
-                                <button type="button" id="btn-copy" class="btn btn-success btn-sm">افزودن</button>
-                            </section>
-
+                            @endforeach
 
                         </section>
 
@@ -326,14 +349,8 @@
         })
     </script>
 
-    <script>
-        $(function () {
-            $('#btn-copy').on('click', function(){
-                var ele = $(this).parent().prev().clone(true);
 
-                $(this).before(ele);
-            })
-        })
-    </script>
+
+
 
 @endsection

@@ -24,7 +24,7 @@ class PostRequest extends FormRequest
         if($this->isMethod('post')){
             return [
                 'name' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'summary' => 'required|max:300|min:5|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي.,><\/;\n\r& ]+$/u',
+                'summary' => 'required|max:300|min:5',
                 'category_id' => 'required|min:1|max:1000000000|regex:/^[0-9]+$/u|exists:post_categories,id',
                 'image' => 'required|image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
@@ -36,7 +36,7 @@ class PostRequest extends FormRequest
         else{
             return [
                 'name' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'summary' => 'required|max:300|min:5|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي.,><\/;\n\r& ]+$/u',
+                'summary' => 'required|max:300|min:5',
                 'category_id' => 'required|min:1|max:1000000000|regex:/^[0-9]+$/u|exists:post_categories,id',
                 'image' => 'image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
