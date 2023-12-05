@@ -37,41 +37,29 @@
                         <tr>
                             <th>#</th>
                             <th>نام فرم</th>
-                            <th>فرم والد</th>
+                            <th>واحد اندازه‌گیری</th>
+                            <th>دسته‌ی والد</th>
                             <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($category_attributes as $key => $category_attribute)
                         <tr>
-                            <th>1</th>
-                            <td>نمایشگر	</td>
-                            <td>کالای الکترونیکی</td>
-                            <td class="width-22-rem text-left">
+                            <th>{{$key + 1}}</th>
+                            <td>{{$category_attribute->name}}</td>
+                            <td>{{$category_attribute->unit}}</td>
+                            <td>{{$category_attribute->category->name}}</td>
+                            <td class="width-22-rem text-center">
                                 <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی ها</a>
-                                <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
-                                <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
+                                <a href="{{ route('admin.market.property.edit', $category_attribute->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
+                                <form class="d-inline" action="{{ route('admin.market.property.destroy', $category_attribute->id) }}" method="POST">
+                                    @csrf
+                                    {{method_field('DELETE')}}
+                                    <button class="btn btn-danger btn-sm delete" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
+                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <th>2</th>
-                            <td>نمایشگر	</td>
-                            <td>کالای الکترونیکی</td>
-                            <td class="width-22-rem text-left">
-                                <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی ها</a>
-                                <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
-                                <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>3</th>
-                            <td>نمایشگر	</td>
-                            <td>کالای الکترونیکی</td>
-                            <td class="width-22-rem text-left">
-                                <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی ها</a>
-                                <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
-                                <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </section>
@@ -81,3 +69,8 @@
 </section>
 
 @endsection
+
+@section('script')
+    @include('admin.alerts.sweetalert.delete-confirm', ['className' => 'delete'])
+@endsection
+
