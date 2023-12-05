@@ -43,4 +43,9 @@ class Product extends Model
         return $this->hasMany(ProductMeta::class);
      }
 
+     public function colors():HasMany
+     {
+        return $this->hasMany(ProductColor::class);
+     }
+
 }
