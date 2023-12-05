@@ -188,6 +188,7 @@ return [
         'price'                     => 'قیمت',
         'introduction'              => 'معرفی محصول',
         'color_name'              => 'رنگ محصول',
+        'unit'                     => 'واحد اندازه‌گیری',
         'price_increase'              => 'افزایش قیمت محصول',
     ],
 ];
