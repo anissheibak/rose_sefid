@@ -187,5 +187,7 @@ return [
         'length'                    => 'طول',
         'price'                     => 'قیمت',
         'introduction'              => 'معرفی محصول',
+        'color_name'              => 'رنگ محصول',
+        'price_increase'              => 'افزایش قیمت محصول',
     ],
 ];
