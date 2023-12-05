@@ -34,7 +34,7 @@
                     @csrf
                     <section class="row">
 
-                        <section class="col-12 col-md-6">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">نام دسته</label>
                                 <input type="text" name="name" value="{{old('name')}}" class="form-control form-control-sm">
