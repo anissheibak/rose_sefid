@@ -187,8 +187,10 @@ return [
         'length'                    => 'طول',
         'price'                     => 'قیمت',
         'introduction'              => 'معرفی محصول',
-        'color_name'              => 'رنگ محصول',
-        'unit'                     => 'واحد اندازه‌گیری',
-        'price_increase'              => 'افزایش قیمت محصول',
+        'color_name'                => 'رنگ محصول',
+        'unit'                      => 'واحد اندازه‌گیری',
+        'price_increase'            => 'افزایش قیمت',
+        'product_id'                => 'محصول',
+        'value'                     => 'مقدار'
     ],
 ];

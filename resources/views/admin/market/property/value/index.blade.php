@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>فرم کالا</title>
+<title>مقدار فرم کالا</title>
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> فرم کالا</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> مقدار فرم کالا</li>
     </ol>
   </nav>
 
@@ -20,12 +20,12 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                 فرم کالا
+                    مقدار فرم کالا
                 </h5>
             </section>
 
             <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                <a href="{{ route('admin.market.property.create') }}" class="btn btn-info btn-sm">ایجاد فرم جدید</a>
+                <a href="{{ route('admin.market.value.create', $attribute->id) }}" class="btn btn-info btn-sm">ایجاد مقدار جدید</a>
                 <div class="max-width-16-rem">
                     <input type="text" class="form-control form-control-sm form-text" placeholder="جستجو">
                 </div>
@@ -37,22 +37,25 @@
                         <tr>
                             <th>#</th>
                             <th>نام فرم</th>
-                            <th>واحد اندازه‌گیری</th>
-                            <th>دسته‌ی والد</th>
+                            <th>نام محصول</th>
+                            <th>مقدار</th>
+                            <th>افزایش قیمت</th>
+                            <th>نوع</th>
                             <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($category_attributes as $key => $category_attribute)
+                        @foreach ($attribute->values as $key => $value)
                         <tr>
                             <th>{{$key + 1}}</th>
-                            <td>{{$category_attribute->name}}</td>
-                            <td>{{$category_attribute->unit}}</td>
-                            <td>{{$category_attribute->category->name}}</td>
+                            <td>{{$attribute->name}}</td>
+                            <td>{{$value->product->name}}</td>
+                            <td>{{json_decode($value->value)->value}}</td>
+                            <td>{{json_decode($value->value)->price_increase}}</td>
+                            <td>{{$value->type == 0 ? 'ثابت' : 'انتخابی'}}</td>
                             <td class="width-22-rem text-center">
-                                <a href="{{ route('admin.market.value.index', $category_attribute->id) }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی ها</a>
-                                <a href="{{ route('admin.market.property.edit', $category_attribute->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
-                                <form class="d-inline" action="{{ route('admin.market.property.destroy', $category_attribute->id) }}" method="POST">
+                                <a href="{{ route('admin.market.value.edit', ['value' => $value->id, 'attribute' => $attribute->id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
+                                <form class="d-inline" action="{{ route('admin.market.value.destroy', ['value' => $value->id, 'attribute' => $attribute->id]) }}" method="POST">
                                     @csrf
                                     {{method_field('DELETE')}}
                                     <button class="btn btn-danger btn-sm delete" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>
