@@ -71,6 +71,6 @@ class ProductColorController extends Controller
     public function destroy(Product $product, ProductColor $color)
     {
         $result = $color->delete();
-       return redirect()->route('admin.market.color.index', $product->id)->with('swal-success', '  رنگ محصول با موفقیت حذف شد');
+        return redirect()->route('admin.market.color.index', $product->id)->with('swal-success', '  رنگ محصول با موفقیت حذف شد');
     }
 }
