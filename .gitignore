@@ -17,3 +17,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+public/images
+resources/views/admin/market/store/index.blade.php
+app/Http/Controllers/Admin/Market/StoreController.php
