@@ -95,11 +95,10 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         //comment
         Route::prefix('comment')->group(function () {
             Route::get('/', [CommentController::class, 'index'])->name('admin.market.comment.index');
-            Route::get('/show', [CommentController::class, 'show'])->name('admin.market.comment.show');
-            Route::post('/store', [CommentController::class, 'store'])->name('admin.market.comment.store');
-            Route::get('/edit/{id}', [CommentController::class, 'edit'])->name('admin.market.comment.edit');
-            Route::put('/update/{id}', [CommentController::class, 'update'])->name('admin.market.comment.update');
-            Route::delete('/destroy/{id}', [CommentController::class, 'destroy'])->name('admin.market.comment.destroy');
+            Route::get('/show/{comment}', [CommentController::class, 'show'])->name('admin.market.comment.show');
+            Route::get('/approved/{comment}', [CommentController::class, 'approved'])->name('admin.market.comment.approved');
+            Route::get('/status/{comment}', [CommentController::class, 'status'])->name('admin.market.comment.status');
+            Route::post('/answer/{comment}', [CommentController::class, 'answer'])->name('admin.market.comment.answer');
         });
 
         //delivery
@@ -195,7 +194,6 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::post('/store', [StoreController::class, 'store'])->name('admin.market.store.store');
             Route::get('/edit/{id}', [StoreController::class, 'edit'])->name('admin.market.store.edit');
             Route::put('/update/{id}', [StoreController::class, 'update'])->name('admin.market.store.update');
-            Route::delete('/destroy/{id}', [StoreController::class, 'destroy'])->name('admin.market.store.destroy');
         });
     });
 
