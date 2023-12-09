@@ -53,7 +53,7 @@
                             <td>{{$product->category->name}}</td>
                             <td class="width-8-rem text-left">
                                 <div class="dropdown">
-                                    <a href="#" class="btn btn-success btn-sm btn-block dorpdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                                    <a href="#" class="btn btn-success btn-sm btn-block dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fa fa-tools"></i> عملیات
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
