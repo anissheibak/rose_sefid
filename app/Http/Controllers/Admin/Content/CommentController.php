@@ -16,7 +16,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments=Comment::orderBy('created_at', 'desc')->simplePaginate(15);
+        $comments = Comment::orderBy('created_at', 'desc')->where('commentable_type', 'App\Models\Content\Post')->simplePaginate(15);
         return view('admin.content.comment.index', compact('comments'));
 
     }
