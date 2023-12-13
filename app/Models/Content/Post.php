@@ -30,8 +30,8 @@ class Post extends Model
         return $this->belongsTo(PostCategory::class, 'category_id');
     }
 
-    public function commens():MorphMany
+    public function comments():MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+       return $this->morphMany(Comment::class, 'commentable');
     }
 }
