@@ -1,9 +1,8 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>افزودن به فروش شگفت انگیز</title>
-<link rel="stylesheet" href="{{ asset('admin-assets/JalaliDatePicker/persian-datepicker.min.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
+<title>ویرایش فروش شگفت انگیز</title>
+<link rel="stylesheet" href="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.css') }}">
 @endsection
 
 @section('content')
@@ -12,8 +11,8 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
-      <li class="breadcrumb-item font-size-12"> <a href="#">برند</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> افزودن به فروش شگفت انگیز</li>
+      <li class="breadcrumb-item font-size-12"> <a href="#">تخفیف</a></li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش  فروش شگفت انگیز</li>
     </ol>
   </nav>
 
@@ -23,7 +22,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                    افزودن به فروش شگفت انگیز
+                    ویرایش فروش شگفت انگیز
                 </h5>
             </section>
 
@@ -32,18 +31,21 @@
             </section>
 
             <section>
-                <form action="{{ route('admin.market.discount.amazingSale.store') }}" method="POST">
+                <form action="{{ route('admin.market.discount.amazingSale.update', $amazingSale->id) }}" method="POST">
                     @csrf
+                    @method("PUT")
                      <section class="row">
+
 
                         <section class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="">انتخاب کالا</label> <br>
-                                <select name="product_id" id="id_select2_example" style="width: 300px;" class="form-control form-control-sm">
-                                    <option value="">کالا را انتخاب کنید</option>
+                                <label for="">انتخاب محصول</label>
+                                <select name="product_id" id="" class="form-control form-control-sm">
+                                    <option value="">محصول را انتخاب کنید</option>
                                     @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" @if(old('product_id') == $product->id) selected @endif  data-img_src="{{ asset($product->image['indexArray'][$product->image['currentImage']]) }}">{{ $product->name }}</option>
+                                    <option value="{{ $product->id }}" @if(old('product_id', $amazingSale->product_id) == $product->id) selected @endif>{{ $product->name }}</option>
                                     @endforeach
+
                                 </select>
                             </div>
                             @error('product_id')
@@ -58,7 +60,7 @@
                         <section class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="">درصد تخفیف</label>
-                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{ old('percentage') }}">
+                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{ old('percentage', $amazingSale->percentage) }}">
                             </div>
                             @error('percentage')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -70,12 +72,11 @@
                         </section>
 
 
-
                         <section class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="">تاریخ شروع</label>
-                                <input type="text" name="start_date" id="start_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="start_date_view" class="form-control form-control-sm">
+                                <input type="text" name="start_date" id="start_date" class="form-control form-control-sm d-none" value="{{$amazingSale->start_date}}">
+                                <input type="text" id="start_date_view" class="form-control form-control-sm" value="{{$amazingSale->start_date}}">
                             </div>
                             @error('start_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -89,8 +90,8 @@
                         <section class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="">تاریخ پایان</label>
-                                <input type="text" name="end_date" id="end_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="end_date_view" class="form-control form-control-sm">
+                                <input type="text" name="end_date" id="end_date" class="form-control form-control-sm d-none" value="{{$amazingSale->end_date}}">
+                                <input type="text" id="end_date_view" class="form-control form-control-sm" value="{{$amazingSale->end_date}}">
                             </div>
                             @error('end_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -101,22 +102,23 @@
                         @enderror
                         </section>
 
-                        <section class="col-12 col-md-6">
+                        <section class="col-12">
                             <div class="form-group">
                                 <label for="status">وضعیت</label>
                                 <select name="status" id="" class="form-control form-control-sm" id="status">
-                                    <option value="0" @if(old('status') == 0) selected @endif>غیرفعال</option>
-                                    <option value="1" @if(old('status') == 1) selected @endif>فعال</option>
+                                    <option value="0" @if (old('status', $amazingSale->status) == 0) selected @endif>غیرفعال</option>
+                                    <option value="1" @if (old('status', $amazingSale->status) == 1) selected @endif>فعال</option>
                                 </select>
                             </div>
                             @error('status')
-                            <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
-                                <strong>
-                                    {{ $message }}
-                                </strong>
-                            </span>
-                        @enderror
+                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
+                                    <strong>
+                                        {{ $message }}
+                                    </strong>
+                                </span>
+                            @enderror
                         </section>
+
 
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
@@ -135,29 +137,6 @@
 
 @section('script')
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.js"></script>
-    <script type="text/javascript">
-        function custom_template(obj){
-                var data = $(obj.element).data();
-                var text = $(obj.element).text();
-                if(data && data['img_src']){
-                    img_src = data['img_src'];
-                    template = $("<div><img src=\"" + img_src + "\" style=\"width:100%;height:150px;\"/><p style=\"font-weight: 700;font-size:14pt;text-align:center;\">" + text + "</p></div>");
-                    return template;
-                }
-            }
-        var options = {
-            'templateSelection': custom_template,
-            'templateResult': custom_template,
-        }
-        $('#id_select2_example').select2(options);
-        $('.select2-container--default .select2-selection--single').css({'height': '220px'});
-
-    </script>
-
-
-
     <script src="{{ asset('admin-assets/jalalidatepicker/persian-date.min.js') }}"></script>
     <script src="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.js') }}"></script>
 
@@ -168,7 +147,7 @@
                     format: 'YYYY/MM/DD',
                     altField: '#start_date'
                 }),
-                $('#end_date_view').persianDatepicker({
+                 $('#end_date_view').persianDatepicker({
                     format: 'YYYY/MM/DD',
                     altField: '#end_date'
                 })
