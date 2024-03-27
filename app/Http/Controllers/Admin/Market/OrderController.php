@@ -43,10 +43,16 @@ class OrderController extends Controller
         $orders = Order::all();
         return view('admin.market.order.index', compact('orders'));
     }
-    public function show()
+    public function show(Order $order)
     {
-        return view('admin.market.order.index');
+        return view('admin.market.order.show', compact('order'));
     }
+
+    public function details(Order $order)
+    {
+        return view('admin.market.order.details', compact('order'));
+    }
+
     public function changeSendStatus(Order $order)
     {
         switch ($order->delivery_status)
