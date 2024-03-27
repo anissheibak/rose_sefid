@@ -65,7 +65,7 @@
                             <td>{{ $order->payment->paymentable->gateway ?? '-' }}</td>
                             <td>@if($order->delivery_status == 0) ارسال نشده  @elseif ($order->delivery_status == 1) درحال ارسال @elseif ($order->delivery_status == 2)  ارسال شده @else تحویل شده @endif</td>
                             <td>{{ $order->delivery->name }}</td>
-                            <td>@if($order->status == 0) در انتظار تایید  @elseif ($order->status == 1)  تایید نشده @else تایید شده @endif</td>
+                            <td>@if($order->order_status == 1) در انتظار تایید  @elseif ($order->order_status == 2)  تایید نشده @elseif ($order->order_status == 3) تایید شده @elseif ($order->order_status == 4) باطل شده @elseif ($order->order_status == 5) مرجوعی @else بررسی نشده @endif</td>
                             <td class="width-8-rem text-left">
                                 <div class="dropdown">
                                     <a href="#" class="btn btn-success btn-sm btn-block dorpdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
@@ -73,9 +73,9 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a href="" class="dropdown-item text-right"><i class="fa fa-images"></i> مشاهده فاکتور</a>
-                                        <a href="" class="dropdown-item text-right"><i class="fa fa-list-ul"></i> تغییر وضعیت ارسال</a>
-                                        <a href="" class="dropdown-item text-right"><i class="fa fa-edit"></i> تغییر وضعیت سفارش</a>
-                                        <a href="" class="dropdown-item text-right"><i class="fa fa-window-close"></i> باطل کردن سفارش</a>
+                                        <a href="{{ route('admin.market.order.changeSendStatus', $order->id) }}" class="dropdown-item text-right"><i class="fa fa-list-ul"></i> تغییر وضعیت ارسال</a>
+                                        <a href="{{ route('admin.market.order.changeOrderStatus', $order->id) }}" class="dropdown-item text-right"><i class="fa fa-edit"></i> تغییر وضعیت سفارش</a>
+                                        <a href="{{ route('admin.market.order.cancelOrder', $order->id) }}" class="dropdown-item text-right"><i class="fa fa-window-close"></i> باطل کردن سفارش</a>
                                     </div>
                                 </div>
                             </td>
