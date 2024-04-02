@@ -105,13 +105,13 @@
                            <tr class="border-bottom">
                             <th>نوع پرداخت</th>
                             <td class="text-left font-weight-bolder">
-                             @if($order->payment_type == 0) آنلاین  @elseif ($order->payment_type == 1) آفلاین @else در محل @endif
+                                {{$order->payment_type_value}}
                             </td>
                         </tr>
                            <tr class="border-bottom">
                             <th>وضعیت پرداخت</th>
                             <td class="text-left font-weight-bolder">
-                                @if($order->payment_status == 0) پرداخت نشده  @elseif ($order->payment_status == 1) پرداخت شده @elseif ($order->payment_status == 2) باطل شده @else برگشت داده شده @endif
+                                {{$order->payment_status_value}}
                             </td>
                         </tr>
                            <tr class="border-bottom">
@@ -123,7 +123,7 @@
                            <tr class="border-bottom">
                             <th>وضعیت ارسال</th>
                             <td class="text-left font-weight-bolder">
-                                @if($order->delivery_status == 0) ارسال نشده  @elseif ($order->delivery_status == 1) درحال ارسال @elseif ($order->delivery_status == 2)  ارسال شده @else تحویل شده @endif
+                                {{$order->delivery_status_value}}
                             </td>
                         </tr>
                            <tr class="border-bottom">
@@ -190,7 +190,7 @@
                           <tr class="border-bottom">
                             <th>وضعیت سفارش</th>
                             <td class="text-left font-weight-bolder">
-                                @if($order->order_status == 1) در انتظار تایید  @elseif ($order->order_status == 2)  تایید نشده @elseif ($order->order_status == 3) تایید شده @elseif ($order->order_status == 4) باطل شده @elseif($order->order_status == 5) مرجوع شده @else بررسی نشده @endif
+                                {{$order->order_status_value}}
                             </td>
                         </tr>
 
