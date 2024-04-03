@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\Content\CommentController as ContentCommentContro
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Market\PropertyValueController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
@@ -418,4 +419,7 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         Route::get('/edit/{setting}', [SettingController::class, 'edit'])->name('admin.setting.edit');
         Route::put('/update/{setting}', [SettingController::class, 'update'])->name('admin.setting.update');
     });
+
+    Route::post('/notification/read-all', [NotificationController::class, 'readAll'])->name('admin.notification.readAll');
+
 });
