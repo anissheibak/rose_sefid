@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Config;
 use App\Http\Services\Message\MessageService;
 use App\Http\Services\Message\SMS\SmsService;
 use App\Http\Requests\Auth\Customer\LoginRegisterRequest;
+use App\Http\Services\Message\Email\EmailService;
 
 class LoginRegisterController extends Controller
 {
@@ -75,7 +76,8 @@ class LoginRegisterController extends Controller
 
         //send sms or email
 
-        if($type == 0){
+        if($type == 0)
+        {
             //send sms
             $smsService = new SmsService();
             $smsService->setFrom(Config::get('sms.otp_from'));
@@ -87,8 +89,22 @@ class LoginRegisterController extends Controller
 
         }
 
+        elseif($type == 1)
+        {
+            $emailService = new EmailService;
+            $details = [
+                'title' => 'ایمیل فعال‌سازی',
+                'body' => "کد فعال‌سازی شما: $otpCode"
+            ];
+            $emailService->setDetails($details);
+            $emailService->setFrom('noreply@example.com', 'example');
+            $emailService->setTo($inputs['id']);
+
+            $messagesService = new MessageService($emailService);
+        }
+
         $messagesService->send();
-        dd('soidvodv');
+
 
     }
 }
