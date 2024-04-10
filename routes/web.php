@@ -256,7 +256,7 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('admin.content.menu.edit');
             Route::put('/update/{menu}', [MenuController::class, 'update'])->name('admin.content.menu.update');
             Route::delete('/destroy/{menu}', [MenuController::class, 'destroy'])->name('admin.content.menu.destroy');
-            Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.faq.status');
+            Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.menu.status');
         });
 
         //page
