@@ -12,6 +12,8 @@ use App\Http\Services\Message\MessageService;
 use App\Http\Services\Message\SMS\SmsService;
 use App\Http\Requests\Auth\Customer\LoginRegisterRequest;
 use App\Http\Services\Message\Email\EmailService;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class LoginRegisterController extends Controller
 {
@@ -97,7 +99,7 @@ class LoginRegisterController extends Controller
                 'body' => "کد فعال‌سازی شما: $otpCode"
             ];
             $emailService->setDetails($details);
-            $emailService->setFrom('noreply@example.com', 'example');
+            $emailService->setFrom('noreply@example.com', 'Rose Sefid');
             $emailService->setTo($inputs['id']);
 
             $messagesService = new MessageService($emailService);
@@ -105,6 +107,109 @@ class LoginRegisterController extends Controller
 
         $messagesService->send();
 
+        return redirect()->route('auth.customer.login-confirm-form', $token);
 
     }
+
+    public function loginConfirmForm($token)
+    {
+        $otp = Otp::where('token', $token)->first();
+        if(empty($otp))
+        {
+            return redirect()->route('auth.customer.login-register-form')->withErrors(['id' => 'آدرس واردشده نامعتبر است']);
+        }
+        return view('customer.auth.login-confirm', compact('token', 'otp'));
+    }
+
+    public function loginConfirm($token, LoginRegisterRequest $request)
+    {
+        $inputs = $request->all();
+        $otp = Otp::where('token', $token)->where('used', 0)->where('created_at', '>=', Carbon::now()->subMinute(5)->toDateTimeString())->first();
+
+        if(empty($otp))
+        {
+            return redirect()->route('auth.customer.login-register-form', $token)->withErrors(['id' => 'آدرس واردشده نامعتبر است.']);
+        }
+
+        //if otp not match
+        if($otp->otp_code !== $inputs['otp'])
+        {
+            return redirect()->route('auth.customer.login-confirm-form', $token)->withErrors(['id' => 'کد واردشده صحیح نیست.']);
+        }
+
+        //if everything is okay
+        $otp->update(['used' => 1]);
+        $user = $otp->user()->first();
+        if($otp->type == 0 && empty($user->mobile_verified_at))
+        {
+            $user->update(['mobile_verified_at' => Carbon::now()]);
+        }
+        elseif($otp->type == 1 && empty($user->email_verified_at))
+        {
+            $user->update(['email_verified_at' => Carbon::now()]);
+        }
+        Auth::login($user);
+        return redirect()->route('customer.home');
+    }
+
+    public function loginResendOtp($token)
+    {
+        $otp = Otp::where('token', $token)->where('created_at', '<=', Carbon::now()->subMinutes(5)->toDateTimeString())->first();
+
+        if(empty($otp))
+        {
+
+            return redirect()->route('auth.customer.login-register-form', $token)->withErrors(['id' => 'آدرس واردشده نامعتبر است.']);
+        }
+
+        $user = $otp->user()->first();
+
+        //create otp code
+        $otpCode = rand(111111, 999999);
+        $token = Str::random(60);
+        $otpInputs = [
+            'token' => $token,
+            'user_id' => $user->id,
+            'otp_code' => $otpCode,
+            'login_id' => $otp->login_id,
+            'type' => $otp->type,
+        ];
+
+        Otp::create($otpInputs);
+
+        //send sms or email
+
+        if($otp->type == 0)
+        {
+            //send sms
+            $smsService = new SmsService();
+            $smsService->setFrom(Config::get('sms.otp_from'));
+            $smsService->setTo(['0' . $user->mobile]);
+            $smsService->setText("گلسرای رز سفید \n  کد تایید : $otpCode");
+            $smsService->setIsFlash(true);
+
+            $messagesService = new MessageService($smsService);
+
+        }
+
+        elseif($otp->type == 1)
+        {
+            $emailService = new EmailService;
+            $details = [
+                'title' => 'ایمیل فعال‌سازی',
+                'body' => "کد فعال‌سازی شما: $otpCode"
+            ];
+            $emailService->setDetails($details);
+            $emailService->setFrom('noreply@example.com', 'Rose Sefid');
+            $emailService->setTo($otp->login_id);
+
+            $messagesService = new MessageService($emailService);
+        }
+
+        $messagesService->send();
+
+        return redirect()->route('auth.customer.login-confirm-form', $token);
+
+    }
+
 }
