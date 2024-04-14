@@ -2,11 +2,10 @@
 
 
 @section('content')
-
     <!-- start slideshow -->
     <section class="container-xxl my-4">
         <section class="row">
-            <section class="col-md-8 pe-1">
+            <section class="col-md-8 pe-md-1 ">
                 <section id="slideshow" class="owl-carousel owl-theme">
                     <section class="item"><a class="w-100 d-block h-auto text-decoration-none" href="#"><img class="w-100 rounded-2 d-block h-auto" src="assets/images/slideshow/1.jpg" alt=""></a></section>
                     <section class="item"><a class="w-100 d-block h-auto text-decoration-none" href="#"><img class="w-100 rounded-2 d-block h-auto" src="assets/images/slideshow/2.jpg" alt=""></a></section>
@@ -16,15 +15,13 @@
                     <section class="item"><a class="w-100 d-block h-auto text-decoration-none" href="#"><img class="w-100 rounded-2 d-block h-auto" src="assets/images/slideshow/6.gif" alt=""></a></section>
                 </section>
             </section>
-            <section class="col-md-4 ps-1">
+            <section class="col-md-4 ps-md-1 mt-2 mt-md-0">
                 <section class="mb-2"><a href="#" class="d-block"><img class="w-100 rounded-2" src="assets/images/slideshow/12.gif" alt=""></a></section>
                 <section class="mb-2"><a href="#" class="d-block"><img class="w-100 rounded-2" src="assets/images/slideshow/11.jpg" alt=""></a></section>
             </section>
         </section>
     </section>
     <!-- end slideshow -->
-
-
 
     <!-- start product lazy load -->
     <section class="mb-3">
@@ -278,21 +275,18 @@
     </section>
     <!-- end product lazy load -->
 
-
-
     <!-- start ads section -->
     <section class="mb-3">
         <section class="container-xxl">
             <!-- two column-->
             <section class="row py-4">
-                <section class="col"><img class="d-block rounded-2 w-100" src="assets/images/ads/two-col-1.jpg" alt=""></section>
-                <section class="col"><img class="d-block rounded-2 w-100" src="assets/images/ads/two-col-2.jpg" alt=""></section>
+                <section class="col-12 col-md-6 mt-2 mt-md-0"><img class="d-block rounded-2 w-100" src="assets/images/ads/two-col-1.jpg" alt=""></section>
+                <section class="col-12 col-md-6 mt-2 mt-md-0"><img class="d-block rounded-2 w-100" src="assets/images/ads/two-col-2.jpg" alt=""></section>
             </section>
 
         </section>
     </section>
     <!-- end ads section -->
-
 
     <!-- start product lazy load -->
     <section class="mb-3">
@@ -586,7 +580,6 @@
     </section>
     <!-- end product lazy load -->
 
-
     <!-- start ads section -->
     <section class="mb-3">
         <section class="container-xxl">
@@ -598,8 +591,6 @@
         </section>
     </section>
     <!-- end ads section -->
-
-
 
     <!-- start brand part-->
     <section class="brand-part mb-4 py-4">
@@ -684,5 +675,4 @@
         </section>
     </section>
     <!-- end brand part-->
-
 @endsection
