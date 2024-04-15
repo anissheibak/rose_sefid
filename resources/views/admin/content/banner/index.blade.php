@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>بنر ها</title>
+<title>بنرها</title>
 @endsection
 
 @section('content')
@@ -20,7 +20,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                    بنر ها
+                    بنرها
                 </h5>
             </section>
 
@@ -62,9 +62,8 @@
                                     @endif>
                                 </label>
                             </td>
-
-                            <td>
-                               {{ $banner->position }}
+                             <td>
+                               {{ $positions[$banner->position] }}
                             </td>
                             <td class="width-16-rem text-left">
                                 <a href="{{ route('admin.content.banner.edit', $banner->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
