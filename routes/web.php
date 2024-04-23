@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\Ticket\TicketAdminController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Auth\Customer\LoginRegisterController;
+use App\Http\Controllers\Customer\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -455,21 +456,6 @@ Route::namespace('Auth')->group(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::get('/', function(){
-    return view('customer.home');
-})->name('customer.home');
+Route::get('/', [HomeController::class, 'home'])->name('customer.home');
 
 
