@@ -80,8 +80,6 @@
                         @enderror
                         </section>
 
-
-
                         <section class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="">آدرس URL</label>
@@ -96,14 +94,12 @@
                         @enderror
                         </section>
 
-
-
                         <section class="col-12">
                             <div class="form-group">
                                 <label for="">موقعیت</label>
                                 <select name="position" id="" class="form-control form-control-sm">
                                     @foreach ($positions as $key => $value)
-                                        <option value="{{$key}}">{{$value}}</option>
+                                        <option value="{{$key}}" @if (old('position') == $key) selected @endif>{{$value}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -113,11 +109,8 @@
                                     {{ $message }}
                                 </strong>
                             </span>
-                        @enderror
+                            @enderror
                         </section>
-
-
-
 
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>

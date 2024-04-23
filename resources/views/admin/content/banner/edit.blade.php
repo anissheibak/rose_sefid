@@ -36,7 +36,7 @@
                     {{ method_field('put') }}
                     <section class="row">
 
-                        <section class="col-12 col-md-6">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">عنوان بنر</label>
                                 <input type="text" class="form-control form-control-sm" name="title"  value="{{ old('title', $banner->title) }}">
@@ -51,7 +51,7 @@
                         </section>
 
 
-                        <section class="col-12 col-md-6">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="image">تصویر</label>
                                 <input type="file" class="form-control form-control-sm" name="image" id="image">
@@ -65,25 +65,6 @@
                             @enderror
                         </section>
 
-                        <section class="row">
-                            @php
-                                $number = 1;
-                                @endphp
-                            @foreach ($banner->image['indexArray'] as $key => $value )
-                            <section class="col-md-{{ 6 / $number }}">
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" name="currentImage" value="{{ $key }}" id="{{ $number }}" @if($banner->image['currentImage'] == $key) checked @endif>
-                                    <label for="{{ $number }}" class="form-check-label mx-2">
-                                        <img src="{{ asset($value) }}" class="w-100" alt="">
-                                    </label>
-                                </div>
-                            </section>
-                            @php
-                            $number++;
-                        @endphp
-                            @endforeach
-
-                        </section>
 
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
@@ -102,8 +83,7 @@
                             @enderror
                         </section>
 
-
-                        <section class="col-12 col-md-6">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">آدرس URL</label>
                                 <input type="text" name="url" value="{{ old('url', $banner->url) }}" class="form-control form-control-sm">
@@ -117,12 +97,14 @@
                         @enderror
                         </section>
 
-
-
                         <section class="col-12">
                             <div class="form-group">
                                 <label for="">موقعیت</label>
-                                <input type="text" name="position" value="{{ old('position', $banner->position) }}" class="form-control form-control-sm">
+                                <select name="position" id="" class="form-control form-control-sm">
+                                    @foreach ($positions as $key => $value)
+                                        <option value="{{$key}}" @if (old('position', $banner->position) == $key) selected @endif>{{$value}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             @error('position')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -130,13 +112,16 @@
                                     {{ $message }}
                                 </strong>
                             </span>
-                        @enderror
+                            @enderror
                         </section>
 
-
-
-
-
+                            <section class="col-12 my-2">
+                                <div class="form-check">
+                                    <label for="" class="form-check-label mx-2">
+                                        <img src="{{ asset($banner->image) }}" class="w-50" alt="">
+                                    </label>
+                                </div>
+                            </section>
 
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
